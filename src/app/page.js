@@ -1,4 +1,6 @@
-import React from 'react'
+"use client"
+
+import React, { useState } from 'react';
 import PlayIcon from './components/icons/PlayIcons'
 import PauseIcon from './components/icons/PauseIcons'
 import ForwardIcon from './components/icons/ForwardIcons'
@@ -6,21 +8,47 @@ import BackwardIcon from './components/icons/BackwardIcons'
 import TrackArt from './components/TrackArt'
 import SliderBar from './components/SliderBar'
 
+
+
 const music_list = {
       img : 'https://lastfm.freetls.fastly.net/i/u/ar0/2624ca521fc7420c8047c12b3b2eec0b.jpg',
       name : 'October and April',
       artist : 'The Rasmus',
-      music : 'music/Stan Long.mp3'
+      music : 'music/Stan Long.mp3',
+      time:{
+        min:2,
+        sec:34
+      }
   }
 
 const Home = () => {
 
+
+  const [isActive, setIsActive] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
+  const [timeSong, setTimeSong] = useState(0)
+
+  const handleStartTimer = ()=>{
+    setIsActive(true);
+    setIsPaused(false);
+    let timeSong = (music_list['time'].min * 60) + music_list['time'].sec
+    setTimeSong(timeSong) 
+  }
+
+  const handlePauseTimer = ()=>{
+    setIsPaused(!isPaused)
+    setIsActive(!isActive)
+  }
+
   return (
     <div className='p-1 border-white bg-white rounded-lg shadow-2xl w-{180} '>
       <div className='flex items-center'>
-        <TrackArt props={music_list}/>
+        <TrackArt 
+          props={music_list}
+          active={isActive}
+        />
         <div className='flex flex-col'>
-          <span className='text-2xl font-bold'>
+          <span className='text-xl font-bold'>
             {music_list.name}
           </span>
           <span className='mt-1 text-base font-medium text-red-600'>
@@ -31,25 +59,45 @@ const Home = () => {
           </small>
         </div>
         <div className='flex'>
-          <span className='w-8 h-8 hover:border-[bg-slate-200] items-center hover:bg-slate-200 cursor-pointer rounded-full p-2'>
-              <BackwardIcon width={50} className="w-full"/>
-          </span>
-          {true ? (
-            <span className='w-8 h-8 hover:border-[bg-slate-200] items-center hover:bg-slate-200 cursor-pointer rounded-full p-2'>
-              <PlayIcon width={50} className="w-full"/>
-            </span>
-          ):(
-            <span className='w-8 h-8 hover:border-[bg-slate-200] items-center hover:bg-slate-200 cursor-pointer rounded-full p-2'>
-              <PauseIcon width={50} className="w-full"/>
-            </span>
-          )}
-          <span className='w-8 h-8 hover:border-[bg-slate-200] items-center hover:bg-slate-200 cursor-pointer rounded-full p-2'>
+          <div 
+            className='w-9 h-9 flex items-center cursor-pointer p-2 active:scale-90'
+          >
+            <BackwardIcon width={50} className="w-full"/>
+          </div>
+          { isActive && isPaused === false ? (
+              <div
+                className='w-9 h-9 flex items-center cursor-pointer p-2 active:scale-90'
+                onClick={handlePauseTimer}
+              >
+                <PauseIcon width={50} className="w-full"/>
+              </div>
+            ):(
+              <div
+                className='w-9 h-9 flex items-center cursor-pointer p-2 active:scale-90'
+                onClick={handleStartTimer}  
+              >
+                <PlayIcon 
+                  width={50}
+                  className="w-full p-0 m-0"
+                />
+              </div>
+            )
+          }
+          <div
+            className='w-9 h-9 flex items-center cursor-pointer p-2 active:scale-90'
+          >
             <ForwardIcon width={50} className="w-full"/>
-          </span>
+          </div>
         </div>
       </div>
-      
-      <SliderBar />
+
+      <SliderBar
+        active={isActive}
+        paused={isPaused}
+        time={timeSong}
+      />      
+
+
     </div>
   )
 }

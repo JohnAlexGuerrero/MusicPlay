@@ -3,7 +3,7 @@ import * as React from "react"
 const PauseSvgComponent = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    height="1em"
+    height="2em"
     viewBox="0 0 384 512"
     {...props}
   >
