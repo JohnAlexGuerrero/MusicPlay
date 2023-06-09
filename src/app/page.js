@@ -4,28 +4,27 @@ import React, { useEffect, useState } from 'react';
 
 import AudioPlayer from './components/AudioPlayer'
 import ListSong from './components/ListSong'
-
-
-
-
-// const music_list = {
-//       thumbnail : 'https://playfeel.weebly.com/uploads/1/2/7/2/12725304/720056125.jpg',
-//       title : 'speed of sound',
-//       album : 'x & y',
-//       artist : 'coldplay',
-//       url : 'coldplay/speed of sound.MP3',
-//       time:288,
-//   }
+import AlbumArt from './components/AlbumArt'
 
 const Home = () => {
 
+  const [song, setSong] = useState({})
+  const [isActive, setIsActive] = useState(true)
+
+  const handleSongChoice = (item) =>{
+    setSong(item)
+    setIsActive(!isActive)
+  }
 
   return (
-    <div>
-      estamos en el home
-
-      <AudioPlayer />
-      <ListSong />
+    <div className='flex justify-between w-full p-0 absolute left-10 top-32'>
+      <div className='w-1/3'>
+        <AlbumArt item={song} active={isActive} />
+        <AudioPlayer item={song} active={isActive} />
+      </div>
+      <div className='w-9/12 p-2'>
+        <ListSong handleChoice={handleSongChoice} />
+      </div>
 
     </div>
   )
@@ -34,3 +33,5 @@ const Home = () => {
 export default Home
 
 // https://dribbble.com/shots/13999318/attachments/5614167?mode=media
+
+// https://api.lyrics.ovh/suggest/coldplay

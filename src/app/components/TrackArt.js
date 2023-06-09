@@ -12,7 +12,7 @@ const TrackArt = ({thumbnail, title, active}) => {
       className='mx-1 h-32 w-32 border bg-cover bg-center rounded-full shadow-2xl p-1 '
     >
       <img 
-        src={thumbnail}
+        src={'images/'+thumbnail}
         alt={title}
         width={100}
         className="w-full rounded-full"

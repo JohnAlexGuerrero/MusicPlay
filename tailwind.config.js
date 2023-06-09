@@ -14,7 +14,10 @@ module.exports = {
       },
       animation: {
         'spin-slow': 'spin 9s linear infinite',
-      }
+      },
+      colors: {
+        'purple-theme': 'rgb(95,22,97)',
+      },
     },
   },
   plugins: [],

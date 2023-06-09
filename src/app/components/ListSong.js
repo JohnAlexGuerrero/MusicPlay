@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { data } from '../api/data'
 
-const ListSong = () => {
+import MenuIcons from './icons/MenuIcons'
+import PlayIcon from '../components/icons/PlayIcons'
+
+const ListSong = ({handleChoice}) => {
 
     const [list_, setList_] = useState([])
 
@@ -18,22 +21,44 @@ const ListSong = () => {
         setList_(getMusic())
 
     }, [])
-    console.log(list_)
+
+
   return (
-    <div className='bg-white mt-3'>
-        <ul className='w-full max-h-96 overflow-y-scroll p-2'>
+    <div className='bg-transparent m-0'>
+        <div className='m-0 p-0'>
+            <h1 className='text-white text-5xl'>Mix diario 3</h1>
+            <p className='text-white text-sm'>DE SPOTIFY. {list_.length} CANCIONES. 0 SEGUIDORES</p>
+        </div>
+        <ul className='w-full max-h-96 overflow-y-scroll p-2 mt-10'>
             { 
                 list_.map((item) => (
                         <li 
                             key={item.id}
-                            className='flex cursor-pointer p-2 justify-between items-center'
+                            className='flex cursor-pointer p-2 justify-between items-center rounded hover:bg-slate-200 hover:border-4 hover:border-slate-400'
+                            onClick={() => handleChoice(item)}
                         >
-                            <div className='font-light'>{item.id < 10 ? '0'+ item.id : item.id}</div>
+                            <div className='font-light'>
+                                { true ?
+                                    (
+                                        <PlayIcon width={20} className="rounded-full border border-slate-900 p-1 w-34 h-34"/>
+                                    ) 
+                                    : item.id < 10 ? '0'+ item.id : item.id 
+                                }
+
+                            </div>
                             <div className=''>
                                 <p className="m-0 font-extrabold font-size-base ">{item.title}</p>
-                                <p className='m-0 font-size-sx text-slate-400'>{item.artist} - 4:32</p>
+                                <p className='m-0 font-size-sx text-slate-400'>
+                                    {item.artist}
+                                    -
+                                    {Math.floor(item.duration / 60) < 10 ? '0' + Math.floor(item.duration / 60) : Math.floor(item.duration / 60)}
+                                    :
+                                    {(item.duration % 60) < 10 ? '0' + (item.duration % 60) : (item.duration % 60)}
+                                </p>
                             </div>
-                            <div className='w-34 h-34 border'>menu</div>
+                            <div className='w-34 h-34'>
+                                < MenuIcons />
+                            </div>
                         </li>
                     )
                 )

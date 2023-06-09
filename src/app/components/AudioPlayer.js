@@ -9,12 +9,10 @@ import ProgressBar from './ProgressBar'
 
 import { data } from '../api/data'
 
-const AudioPlayer = () => {
+const AudioPlayer = ({item, active}) => {
     
-    const [isActive, setIsActive] = useState(false);
-    const [isPaused, setIsPaused] = useState(true);
-    const [listSong, setListSong] = useState([])
-
+    const [isActive, setIsActive] = useState(false)
+    const [isPaused, setIsPaused] = useState(true)
     const audioRef = useRef()
 
     const [url, setUrl] = useState('')
@@ -25,21 +23,13 @@ const AudioPlayer = () => {
     const [time, setTime] = useState(0)
 
     useEffect(()=>{
-        // setUrl(props.thumbnail)
-        // setAuthor(props.artist)
-        // setTitle(props.title)
-        // setThumbnail(props.thumbnail)
-        // setAlbum(props.album)
-        // setTime(props.time) 
-
-        const getMusic = ()=>{
-          data.forEach(item =>{
-            listSong.push(item)
-          })
-        }
-    
-        getMusic()
-    },[])
+        setUrl(item.url)
+        setAuthor(item.artist)
+        setTitle(item.title)
+        setThumbnail(item.thumbnail)
+        setAlbum(item.album)
+        setTime(item.duration) 
+    },[active])
 
     const playTrack = ()=>{
         audioRef.current.play()
@@ -52,7 +42,6 @@ const AudioPlayer = () => {
         audioRef.current.pause()
 
         setIsActive(false)
-        // setIsActive(!isActive)
     }
 
     const nextTrack = ()=>{
