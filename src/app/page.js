@@ -2,28 +2,44 @@
 
 import React, { useEffect, useState } from 'react';
 
-import AudioPlayer from './components/AudioPlayer'
 import ListSong from './components/ListSong'
-import AlbumArt from './components/AlbumArt'
+
+import AudioPlayer from './components/AudioPlayer';
+import {data} from './api/data'
 
 const Home = () => {
 
   const [song, setSong] = useState({})
   const [isActive, setIsActive] = useState(true)
+  const [list, setList] = useState([])
 
-  const handleSongChoice = (item) =>{
+  useEffect(()=>{
+    let list = []
+
+    data.map(item =>{
+      list.push(item)
+    })
+
+    setList(list)
+  }, [])
+
+  const handleSongChoice = (item) =>{ 
     setSong(item)
     setIsActive(!isActive)
   }
 
   return (
-    <div className='flex justify-between w-full p-0 absolute left-10 top-32'>
-      <div className='w-1/3'>
+    <div className='flex w-full p-0 absolute left-10 top-32'>
+      {/* <div className='w-1/3'>
         <AlbumArt item={song} active={isActive} />
-        <AudioPlayer item={song} active={isActive} />
+
+      </div> */}
+      <div className='w-1/4 p-1'>
+        <ListSong handleChoice={handleSongChoice} list={list}/>
       </div>
-      <div className='w-9/12 p-2'>
-        <ListSong handleChoice={handleSongChoice} />
+
+      <div className='w-1/4 p-1 relative'>
+        <AudioPlayer item={song} active={isActive}/>
       </div>
 
     </div>
@@ -33,5 +49,4 @@ const Home = () => {
 export default Home
 
 // https://dribbble.com/shots/13999318/attachments/5614167?mode=media
-
-// https://api.lyrics.ovh/suggest/coldplay
+// https://dribbble.com/shots/2449648-TV-music/attachments/477174?mode=media

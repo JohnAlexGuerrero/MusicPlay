@@ -39,7 +39,7 @@ const ProgressBar = ({ active, paused, time }) => {
 
   return (
     <div
-      className={active ? "block my-1 h-30 bg-white ease-linear p-1" : "hidden"}
+      className="block my-0 h-30 bg-transparent ease-linear p-1"
     >
       <input
         type="range"

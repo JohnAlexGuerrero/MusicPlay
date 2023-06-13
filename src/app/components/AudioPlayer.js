@@ -7,7 +7,6 @@ import BackwardIcon from './icons/BackwardIcons'
 import TrackArt from './TrackArt'
 import ProgressBar from './ProgressBar'
 
-import { data } from '../api/data'
 
 const AudioPlayer = ({item, active}) => {
     
@@ -19,23 +18,32 @@ const AudioPlayer = ({item, active}) => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [thumbnail, setThumbnail] = useState('')
-    const [album, setAlbum] = useState('')
     const [time, setTime] = useState(0)
 
     useEffect(()=>{
-        setUrl(item.url)
-        setAuthor(item.artist)
-        setTitle(item.title)
-        setThumbnail(item.thumbnail)
-        setAlbum(item.album)
-        setTime(item.duration) 
-    },[active])
+        if (Object.entries(item).length != 0 ) {
+            setUrl(item.url)
+            setAuthor(item.artist)
+            setTitle(item.title)
+            setThumbnail(item.thumbnail)
+            setTime(item.duration)
+
+            playTrack()
+        }
+        
+    },[isPaused, active])
+
+    const autoPlayTrack = () =>{
+        if (!isActive && isPaused == false) {
+            playTrack()
+            setIsActive(!isActive)
+        }
+    }
 
     const playTrack = ()=>{
         audioRef.current.play()
 
-        setIsActive(true)
-        setIsPaused(!true)
+        setIsActive(!isActive)
     }
 
     const pauseTrack = ()=>{
@@ -57,30 +65,40 @@ const AudioPlayer = ({item, active}) => {
         playTrack();
     }
 
+    const prevTrack = ()=>{
+
+    }
+
+    const playAllTracks = () =>{
+
+    }
+
+    const stopTrack = ()=>{
+        audioRef.currentTime = 0
+    }
+
     return (
-        <div className='p-1 border-white bg-white rounded-lg shadow-2xl w-{180} '>
+        <div className='p-1 bg-transparent'>
             <audio src={url} ref={audioRef}/>
 
-            <div className='flex items-center'>
+            <div className='flex flex-col items-center mt-9'>
                 <TrackArt
                     thumbnail={thumbnail}
                     title={title}
                     active={isActive}
                 />
 
-                <div className='flex flex-col'>
-                    <span className='m-0 text-xl font-bold'>
-                        {title}
-                    </span>
-                    <span className='m-0 text-base font-medium text-red-600'>
-                        {author}
-                    </span>
-                    <small className='text-slate-400'>
-                        {album}
-                    </small>
+                <div className='text-center p-2 m-0'>
+                    {title}
                 </div>
 
-                <div className='flex'>
+                <ProgressBar
+                    active={isActive}
+                    paused={isPaused}
+                    time={time}
+                />  
+
+                <div className='flex items-center'>
                     <div
                         className='w-9 h-9 flex items-center cursor-pointer p-2 active:scale-90'
                     >
@@ -91,13 +109,6 @@ const AudioPlayer = ({item, active}) => {
                         isActive && isPaused == false ? (
                             <div
                                 className='w-9 h-9 flex items-center cursor-pointer p-2 active:scale-90'
-                                onClick={pauseTrack}
-                            >
-                                <PauseIcon width={50} className="w-full" />
-                            </div>
-                        ) : (
-                            <div
-                                className='w-9 h-9 flex items-center cursor-pointer p-2 active:scale-90'
                                 onClick={playTrack}
                             >
                                 <PlayIcon
@@ -105,7 +116,14 @@ const AudioPlayer = ({item, active}) => {
                                     className="w-full p-0 m-0"
                                 />
                             </div>
-                        )
+                        ) : (
+                            <div
+                                className='w-9 h-9 flex items-center cursor-pointer p-2 active:scale-90'
+                                onClick={pauseTrack}
+                            >
+                                <PauseIcon width={50} className="w-full" />
+                            </div>
+                        ) 
                     }
 
                     <div
@@ -117,11 +135,7 @@ const AudioPlayer = ({item, active}) => {
                 </div>
             </div>
             
-            <ProgressBar
-                active={isActive}
-                paused={isPaused}
-                time={time}
-            />   
+
         </div>
     )
 }
